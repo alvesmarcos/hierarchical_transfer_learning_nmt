@@ -1,2 +1,2 @@
-# hierarchical_transfer_learning_nmt
-A research about Hierarchical Transfer Learning for Neural Machine Translation using fairseq
+# Hierarchical Transfer Learning Neural Machine Translation
+A research about Hierarchical Transfer Learning for Neural Machine Translation using fairseq :snake: :crown:
