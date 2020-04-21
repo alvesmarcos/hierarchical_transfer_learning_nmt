@@ -5,6 +5,7 @@ import re
 import unicodedata
 
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 # max word in a sentence per row
 MAX_LENGTH = 10
@@ -60,7 +61,6 @@ def read_data(path, reverse=False):
         pairs.append((source, target))
         input_lang.append(source)
         output_lang.append(target)
-
     return input_lang, output_lang, pairs
 
 def write_corpus(path, output):
@@ -68,3 +68,18 @@ def write_corpus(path, output):
     with open(output, 'w') as f:
         for source, target in zip(input_lang, output_lang):
             f.write(f'{source}\t{target}\n')
+
+def write_train_test(path, train_source, test_source, train_target, test_target):
+    input_lang, output_lang, _ = read_data(path)
+    X_train, X_test, y_train, y_test = train_test_split(
+        input_lang, output_lang,test_size=0.33)
+    # helper method to write a file
+    def write(path, data):
+        with open(path, 'w') as f:
+            for line in data:
+                f.write(f'{line}\n')   
+    # write into files
+    write(train_source, X_train)
+    write(test_source, X_test)
+    write(train_target, y_train)
+    write(test_target, y_test)
