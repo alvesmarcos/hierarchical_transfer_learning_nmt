@@ -3,11 +3,12 @@
 
 import re
 import unicodedata
-import argparse
 
 import pandas as pd
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
+
+from resource import Resource
 
 # max word in a sentence per row
 MAX_LENGTH = 10
@@ -71,10 +72,12 @@ def write_corpus(path, output):
         for source, target in zip(input_lang, output_lang):
             f.write(f'{source}\t{target}\n')
 
-def write_train_test(path, train_source, test_source, train_target, test_target):
+def write_valid_train_test(path, train_source, test_source, valid_source, valid_target, train_target, test_target):
     input_lang, output_lang, _ = read_data(path)
     X_train, X_test, y_train, y_test = train_test_split(
-        input_lang, output_lang,test_size=0.33)
+        input_lang, output_lang,test_size=0.25)
+    X_train, X_valid, y_train, y_valid = train_test_split(
+        X_train, y_train,test_size=0.25)
     # helper method to write a file
     def write(path, data):
         with open(path, 'w') as f:
@@ -82,30 +85,20 @@ def write_train_test(path, train_source, test_source, train_target, test_target)
                 f.write(f'{line}\n')   
     # write into files
     write(train_source, X_train)
+    write(valid_source, X_valid)
     write(test_source, X_test)
     write(train_target, y_train)
+    write(valid_target, y_valid)
     write(test_target, y_test)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("data", help="File that contains all phrases.")
-    parser.add_argument(
-        "train_source", help="Path to save the train data only for source language.")
-    parser.add_argument(
-        "test_source", help="Path to save the test data only for source language.")
-    parser.add_argument(
-        "train_target", help="Path to save the train data only for target language.")
-    parser.add_argument(
-        "test_target", help="Path to save the test data only for target language.")
-    # get args passed by paras
-    args = parser.parse_args()
-    # write train and test data
-    write_train_test(
-        args.data,
-        args.train_source,
-        args.test_source,
-        args.train_target,
-        args.test_target)
-
-# e.g. $ python preprocessor.py ./data/eng-fra.txt ./data/train+eng.txt ./data/test+eng.txt ./data/train+fra.txt ./data/test+fra.txt
+    write_valid_train_test(
+        Resource.DICT_RESOURCE['corpus'],
+        Resource.DICT_RESOURCE['train+source'],
+        Resource.DICT_RESOURCE['test+source'],
+        Resource.DICT_RESOURCE['valid+source'],
+        Resource.DICT_RESOURCE['valid+target'],
+        Resource.DICT_RESOURCE['train+target'],
+        Resource.DICT_RESOURCE['test+target']
+    )
