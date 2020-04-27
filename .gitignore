@@ -127,6 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-learn/data/
-learn/bin
-learn/checkpoints
+
+checkpoints/*
+!checkpoints/.gitkeep
+data/*
+!data/.gitkeep
+bin/*
+!bin/.gitkeep
+gen/*
+!gen/.gitkeep
