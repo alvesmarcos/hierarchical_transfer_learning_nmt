@@ -1,4 +1,7 @@
 import os
+
+import torch
+import torch.nn as nn
 from fairseq.models.lightconv import LightConvModel
 
 from resource import Resource
@@ -30,9 +33,18 @@ if __name__ == "__main__":
         bpe='subword_nmt',
         bpe_codes='data/gen/bpe+code.txt'
     )
+    #print(model.src_dict.indices['hello'])
+    lookup_tensor = torch.tensor([model.src_dict.indices['hello']], dtype=torch.long)
+    embeds = model.models[0].encoder.embed_tokens
+    hello_embed = embeds(lookup_tensor)
+    
+    print(hello_embed)
+    print(embeds)
+  
+    # print(model.state_dict["embed_tokens"])
     #model.eval()
-    #tokens = model.encode('hello world!')
+    # tokens = model.encode(model.src_dict.symbols[10])
     #last_layer_features = model.extract_features(tokens, return_all_hiddens=True)
     #print(last_layer_features)
-    #print(tokens)
-    print(model.translate('hello world'))
+    # print(tokens)
+    # print(model.translate('hello world'))
