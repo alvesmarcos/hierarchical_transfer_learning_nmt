@@ -128,11 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-checkpoints/*
-!checkpoints/.gitkeep
+jobs/*
+!jobs/.gitkeep
 data/*
 !data/.gitkeep
-bin/*
-!bin/.gitkeep
-gen/*
-!gen/.gitkeep
