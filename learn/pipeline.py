@@ -3,6 +3,7 @@ from datetime import datetime
 
 import yaml
 
+from train import Train
 from apply_bpe import ApplyBpe
 from learn_bpe import LearnBpe
 from reader import Reader
@@ -27,7 +28,8 @@ class Pipeline:
             'selection': Selection,
             'split': Split,
             'writer': Writer,
-            'binarize': Binarize
+            'binarize': Binarize,
+            'train': Train
         }
 
     def __parse_yml(self):

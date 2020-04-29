@@ -18,3 +18,11 @@ pipeline:
         bpe_tokens: 10000
     apply_bpe: no_params
     binarize: no_params
+    train:
+        arch: lightconv_iwslt_de_en
+        lr: 0.25
+        dropout: 0.2
+        max_token: 4000
+        patience: 2
+        clip_norm: 0.1
+        max_epoch: 5
