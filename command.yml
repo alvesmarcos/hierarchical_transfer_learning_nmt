@@ -1,0 +1,19 @@
+# description what you about to do or test
+description: Just check if the pipeline is running fine
+# languages (target and source) extensions
+languages:
+    source: en
+    target: fr
+# input command to run the pipeline
+pipeline:
+    reader:
+        path: data/eng-fra.txt
+    selection:
+        max_length: 15
+    split:
+        valid_size: 0.15
+        test_size: 0.25
+    writer: no_params
+    learn_bpe:
+        bpe_tokens: 10000
+    apply_bpe: no_params
