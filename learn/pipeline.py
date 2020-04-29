@@ -9,6 +9,7 @@ from reader import Reader
 from selection import Selection
 from split import Split
 from writer import Writer
+from binarize import Binarize
 
 class Pipeline:
     def __init__(self, path):
@@ -25,21 +26,31 @@ class Pipeline:
             'reader': Reader,
             'selection': Selection,
             'split': Split,
-            'writer': Writer   
+            'writer': Writer,
+            'binarize': Binarize
         }
 
-    def __parse_commands(self):
+    def __parse_yml(self):
         with open(self.__path, 'r') as f:
             parsed = yaml.load(f, Loader=yaml.FullLoader)
-        commands = parsed.get('pipeline')
-        return commands
+        return parsed
+
+    def __parse_description(self):
+        parsed = self.__parse_yml()
+        return parsed.get('description')
+
+    def __parse_commands(self):
+        parsed = self.__parse_yml()
+        return parsed.get('pipeline')
 
     def __mount(self):
         folders = ['bin', 'checkpoints', 'data', 'gen', 'tmp']
-        os.mkdir(os.path.abspath(os.path.join('jobs', self.__timestamp)))
+        path = os.path.abspath(os.path.join('jobs', self.__timestamp))
+        os.mkdir(path)
         for folder in folders:
-            os.mkdir(
-                os.path.abspath(os.path.join('jobs', self.__timestamp, folder)))
+            os.mkdir(os.path.join(path, folder))
+        with open(os.path.join(path, 'description.txt'), 'w') as f:
+            f.write(self.__parse_description())
 
     def run(self):
         self.__mount()

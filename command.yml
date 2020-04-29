@@ -1,5 +1,5 @@
 # description what you about to do or test
-description: Just check if the pipeline is running fine
+description: Test pipeline
 # languages (target and source) extensions
 languages:
     source: en
@@ -17,3 +17,4 @@ pipeline:
     learn_bpe:
         bpe_tokens: 10000
     apply_bpe: no_params
+    binarize: no_params
