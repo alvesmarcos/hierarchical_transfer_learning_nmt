@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import utils
 from step import Step
@@ -18,8 +19,8 @@ class ApplyBpe(Step):
         for src_path, tar_path, data_type in zip(source_paths, target_paths, data):
             output_bpe = os.path.abspath(os.path.join(
                 'jobs', self.timestamp, 'gen', data_type + utils.language_ext('source')))
-            os.system(f"subword-nmt apply-bpe -c {outfile} < {src_path} > {output_bpe}")
+            subprocess.call(f"subword-nmt apply-bpe -c {outfile} < {src_path} > {output_bpe}", shell=True)
             output_bpe = os.path.abspath(os.path.join(
                 'jobs', self.timestamp, 'gen', data_type + utils.language_ext('target')))
-            os.system(f"subword-nmt apply-bpe -c {outfile} < {tar_path} > {output_bpe}")
+            subprocess.call(f"subword-nmt apply-bpe -c {outfile} < {tar_path} > {output_bpe}", shell=True)
         return _input
