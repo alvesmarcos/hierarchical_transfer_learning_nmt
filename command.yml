@@ -25,4 +25,6 @@ pipeline:
         max_token: 4000
         patience: 2
         clip_norm: 0.1
-        max_epoch: 5
+        max_epoch: 2
+    test:
+        beam: 6

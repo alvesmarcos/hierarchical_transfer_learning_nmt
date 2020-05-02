@@ -11,6 +11,7 @@ from selection import Selection
 from split import Split
 from writer import Writer
 from binarize import Binarize
+from test import Test
 
 class Pipeline:
     def __init__(self, path):
@@ -29,7 +30,8 @@ class Pipeline:
             'split': Split,
             'writer': Writer,
             'binarize': Binarize,
-            'train': Train
+            'train': Train,
+            'test': Test
         }
 
     def __parse_yml(self):
@@ -46,7 +48,7 @@ class Pipeline:
         return parsed.get('pipeline')
 
     def __mount(self):
-        folders = ['bin', 'checkpoints', 'data', 'gen', 'tmp']
+        folders = ['bin', 'checkpoints', 'data', 'gen', 'log', 'tmp']
         path = os.path.abspath(os.path.join('jobs', self.__timestamp))
         os.mkdir(path)
         for folder in folders:
