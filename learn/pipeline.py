@@ -12,6 +12,7 @@ from split import Split
 from writer import Writer
 from binarize import Binarize
 from test import Test
+from score import Score
 
 class Pipeline:
     def __init__(self, path):
@@ -31,7 +32,8 @@ class Pipeline:
             'writer': Writer,
             'binarize': Binarize,
             'train': Train,
-            'test': Test
+            'test': Test,
+            'score': Score
         }
 
     def __parse_yml(self):
