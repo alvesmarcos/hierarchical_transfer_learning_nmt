@@ -1,5 +1,5 @@
 # description what you about to do or test
-description: Test pipeline
+description: Train the pipeline with all step integrated
 # languages (target and source) extensions
 languages:
     source: en
@@ -8,6 +8,7 @@ languages:
 pipeline:
     reader:
         path: data/eng-fra.txt
+        sample: 1
     selection:
         max_length: 15
     split:
@@ -26,6 +27,8 @@ pipeline:
         patience: 2
         clip_norm: 0.1
         max_epoch: 1
+        patience: 5
+    embeds: no_params
     test:
         beam: 6
     score: no_params

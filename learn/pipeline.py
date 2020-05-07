@@ -13,6 +13,7 @@ from writer import Writer
 from binarize import Binarize
 from test import Test
 from score import Score
+from embeds import Embeds
 
 class Pipeline:
     def __init__(self, path):
@@ -33,7 +34,8 @@ class Pipeline:
             'binarize': Binarize,
             'train': Train,
             'test': Test,
-            'score': Score
+            'score': Score,
+            'embeds': Embeds
         }
 
     def __parse_yml(self):

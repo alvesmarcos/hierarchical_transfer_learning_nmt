@@ -15,7 +15,7 @@ class Test(Step):
     def routine(self, _input):
         root = os.path.abspath(os.path.join('jobs', self.timestamp))
         _bin = os.path.join(root, 'bin')
-        input_test = os.path.join(root, 'gen', 'test.en')
+        input_test = os.path.join(root, 'gen', 'test.'+utils.language_ext('source'))
         ouput = os.path.join(root, 'tmp', 'translated.txt')
         subprocess.call(f"MKL_SERVICE_FORCE_INTEL=1 fairseq-interactive {_bin} \
             --path {_input}/checkpoint_best.pt \
