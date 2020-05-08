@@ -1,5 +1,6 @@
 import os
 import subprocess
+from glob import glob
 
 import utils
 from step import Step
@@ -18,6 +19,9 @@ class Train(Step):
         self.__max_epoch = kwargs['max_epoch']
         self.timestamp = args[0]
     
+    def __adapt_embed(self):
+        pass
+        
     def routine(self, _input):
         root = os.path.abspath(os.path.join('jobs', self.timestamp))
         output = os.path.join(root, 'checkpoints')

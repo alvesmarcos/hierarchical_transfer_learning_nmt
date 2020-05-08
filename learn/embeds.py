@@ -26,7 +26,8 @@ class Embeds(Step):
         return model
 
     def __write(self, name, embeds, indices, symbols):
-        root = os.path.abspath(os.path.join('jobs', self.timestamp, 'tmp', name))
+        root = os.path.abspath(
+            os.path.join('jobs', self.timestamp, 'checkpoints', name))
         with open(root, 'w') as f:
             for word in symbols:
                 #print(f'word: {word}\n')
@@ -36,7 +37,7 @@ class Embeds(Step):
             
                 word_embed_array = list(word_embed.detach().numpy())
                 word_embed_str = str(word_embed_array)[1:-1]
-                f.write(word + ': ' + word_embed_str.replace(',', '') + '\n\n')
+                f.write(word + ': ' + word_embed_str.replace(',', '') + '\n')
 
     def routine(self, _input):
         model = self.__load_best_model()
