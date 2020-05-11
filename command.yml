@@ -1,5 +1,6 @@
 # description what you about to do or test
 description: Train the pipeline with all step integrated
+group: AA
 # languages (target and source) extensions
 languages:
     source: en
@@ -8,7 +9,7 @@ languages:
 pipeline:
     reader:
         path: data/eng-fra.txt
-        sample: 1
+        sample: 0.50
     selection:
         max_length: 15
     split:
@@ -20,15 +21,8 @@ pipeline:
     apply_bpe: no_params
     binarize: no_params
     train:
-        arch: lightconv_iwslt_de_en
-        lr: 0.25
-        dropout: 0.2
-        max_token: 4000
-        patience: 2
-        clip_norm: 0.1
-        max_epoch: 1
-        patience: 5
-    embeds: no_params
+        json_params: params/train.json
     test:
-        beam: 6
+        json_params: params/test.json
     score: no_params
+    embeds: no_params
