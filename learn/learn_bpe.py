@@ -10,11 +10,12 @@ class LearnBpe(Step):
     def __init__(self, *args, **kwargs):
         self.__bpe_tokens = kwargs['bpe_tokens']
         self.timestamp = args[0]
+        self.group = args[1]
     
     def routine(self, _input):
         outfile = os.path.abspath(
-            os.path.join('jobs', self.timestamp, 'gen', 'bpe_code.txt'))
-        tmp_concated = os.path.abspath(os.path.join('jobs', self.timestamp, 'tmp', 'corpus.txt'))
+            os.path.join('jobs', self.group, self.timestamp, 'gen', 'bpe_code.txt'))
+        tmp_concated = os.path.abspath(os.path.join('jobs', self.group, self.timestamp, 'tmp', 'corpus.txt'))
         source_paths, target_paths = _input
         # concat all train and validation (first two paths) files (source and target)
         subprocess.call(

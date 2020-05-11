@@ -11,10 +11,11 @@ class Writer(Step):
 
     def __init__(self, *args, **kwargs):
         self.timestamp = args[0]
+        self.group = args[1]
     
     def __write(self, lang, data):
         path = os.path.abspath(
-            os.path.join('jobs', self.timestamp, 'gen', lang + '.txt'))
+            os.path.join('jobs', self.group, self.timestamp, 'gen', lang + '.txt'))
         with open(path, 'w') as f:
             for line in data:
                 f.write(f"{line}\n")

@@ -22,7 +22,8 @@ class Pipeline:
         timestamp = datetime.timestamp(now)
         # should be use to create a folder inside jobs/
         self.__timestamp = str(timestamp)
-
+        self.__group = ''
+        
     def __dict_instance(sekf):
         return {
             'apply_bpe': ApplyBpe,
@@ -46,15 +47,21 @@ class Pipeline:
     def __parse_description(self):
         parsed = self.__parse_yml()
         return parsed.get('description')
+    
+    def __parse_group(self):
+        parsed = self.__parse_yml()
+        return parsed.get('group')
 
     def __parse_commands(self):
         parsed = self.__parse_yml()
         return parsed.get('pipeline')
 
     def __mount(self):
+        # initialize group folder 
+        self.__group = self.__parse_group()
         folders = ['bin', 'checkpoints', 'data', 'gen', 'log', 'tmp']
-        path = os.path.abspath(os.path.join('jobs', self.__timestamp))
-        os.mkdir(path)
+        path = os.path.abspath(os.path.join('jobs', self.__group, self.__timestamp))
+        os.makedirs(path, exist_ok=True)
         for folder in folders:
             os.mkdir(os.path.join(path, folder))
         with open(os.path.join(path, 'description.txt'), 'w') as f:
@@ -67,7 +74,7 @@ class Pipeline:
         _input = None
         for command, params in queue.items():
             if params == 'no_params':
-                step = instances.get(command)(self.__timestamp)
+                step = instances.get(command)(self.__timestamp, self.__group)
             else:
-                step = instances.get(command)(self.__timestamp, **params)
+                step = instances.get(command)(self.__timestamp, self.__group, **params)
             _input = step.routine(_input)

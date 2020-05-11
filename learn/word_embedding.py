@@ -62,11 +62,11 @@ class WordEmbedding:
 
 # root = os.path.abspath('jobs')
 # dirs = sorted(os.listdir(root))
-# embeds_path = os.path.join(root, '1588898052.631825', 'checkpoints')
+# embeds_path = os.path.join(root, '1588911091.97093', 'checkpoints')
 # # print(embeds_path)
 
 # word_embedding = WordEmbedding(
 #     os.path.join(embeds_path, 'embeds_encoder.txt'),
-#     os.path.join(root, '1588885670.72185', 'bin', 'dict.en.txt')
+#     os.path.join(root, '1588911678.820784', 'bin', 'dict.en.txt')
 # )
 # word_embedding.process_embed('randomly', 'generated_embed.txt')

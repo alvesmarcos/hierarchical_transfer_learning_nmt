@@ -9,16 +9,18 @@ class Test(Step):
     timestamp = None    
 
     def __init__(self, *args, **kwargs):
-        self.__beam = kwargs['beam']
+        self.__json_params = kwargs['json_params']
         self.timestamp = args[0]
+        self.group = args[1]
     
     def routine(self, _input):
-        root = os.path.abspath(os.path.join('jobs', self.timestamp))
+        root = os.path.abspath(os.path.join('jobs', self.group, self.timestamp))
         _bin = os.path.join(root, 'bin')
         input_test = os.path.join(root, 'gen', 'test.'+utils.language_ext('source'))
         ouput = os.path.join(root, 'tmp', 'translated.txt')
+        params = utils.extract_params_from_json(self.__json_params)        
         subprocess.call(f"MKL_SERVICE_FORCE_INTEL=1 fairseq-interactive {_bin} \
             --path {_input}/checkpoint_best.pt \
-            --beam {self.__beam} --remove-bpe \
+            {params} --remove-bpe \
             --tensorboard-logdir {os.path.join(root, 'log')} < {input_test} | tee {ouput}", shell=True)
         return ouput

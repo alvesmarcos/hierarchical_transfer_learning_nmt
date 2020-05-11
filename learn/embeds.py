@@ -13,9 +13,10 @@ class Embeds(Step):
 
     def __init__(self, *args, **kwargs):
         self.timestamp = args[0]
+        self.group = args[1]
     
     def __load_best_model(self):
-        root = os.path.abspath(os.path.join('jobs', self.timestamp))
+        root = os.path.abspath(os.path.join('jobs', self.group, self.timestamp))
         model = LightConvModel.from_pretrained(
             os.path.join(root, 'checkpoints'),
             checkpoint_file='checkpoint_best.pt',
@@ -27,7 +28,7 @@ class Embeds(Step):
 
     def __write(self, name, embeds, indices, symbols):
         root = os.path.abspath(
-            os.path.join('jobs', self.timestamp, 'checkpoints', name))
+            os.path.join('jobs', self.group, self.timestamp, 'checkpoints', name))
         with open(root, 'w') as f:
             for word in symbols:
                 #print(f'word: {word}\n')

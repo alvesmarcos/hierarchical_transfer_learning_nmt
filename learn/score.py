@@ -10,9 +10,10 @@ class Score(Step):
 
     def __init__(self, *args, **kwargs):
         self.timestamp = args[0]
+        self.group = args[1]
     
     def routine(self, _input):
-        root = os.path.abspath(os.path.join('jobs', self.timestamp))
+        root = os.path.abspath(os.path.join('jobs', self.group, self.timestamp))
         target_test = os.path.join(root, 'gen', 'test.fr')
         file_hypo = os.path.join(root, 'tmp', 'hypo.txt')
         score = os.path.join(root, 'tmp', 'score.txt')
