@@ -1,6 +1,9 @@
 import os
+import logging
 
 import numpy as np
+
+logger = logging.getLogger('pipeline')
 
 class WordEmbedding:
     # consts to WordEmbedding
@@ -27,6 +30,8 @@ class WordEmbedding:
             for line in f:
                 content = line.split()
                 vocabulary.append(content[0])
+        logger.info(f"Embed file path `{self.embed_file}` with {len(words)} words")
+        logger.info(f"Dictionary file path `{self.embed_file}` with {len(vocabulary)} symbols")
         return words, embeds, vocabulary
 
     def __write(self, ouput, words, embeds):
@@ -35,7 +40,24 @@ class WordEmbedding:
                 f.write(word + ': ' + embed + '\n')
         return ouput
 
+    def __search_max_min_interval(self, embeds):
+        flag = True
+        _max = 0
+        _min = 0
+        for embed in embeds:
+            embed_list = [float(x) for x in embed.split()]
+            max_embed = max(embed_list)
+            min_embed = min(embed_list)
+            if flag or max_embed > _max:
+                _max = max_embed
+            if flag or min_embed < _min:
+                _min = min_embed
+            flag = False
+        return _max, _min
+
     def __randomly(self, words, embeds, vocabulary):
+        _max, _min = self.__search_max_min_interval(embeds)
+        logger.info(f'Random normal distribution interval [{_min}, {_max}]')
         words_out = list()
         embeds_out = list()
         for token in vocabulary:
@@ -43,12 +65,13 @@ class WordEmbedding:
             if token in words:
                 embeds_out.append(embeds[words.index(token)])
             else:
-                embed = np.random.normal(-0.5, 0.5, self.DIMENSION).tolist()
+                embed = np.random.normal([_min, _max], self.DIMENSION).tolist()
                 embed_str = str(embed)[1:-1]
                 embeds_out.append(embed_str.replace(',', ''))
         return words_out, embeds_out                
 
     def __strategy(self, name, words, embeds, vocabulary):
+        logger.info(f"Word embedding method is `{name}`")
         if name == 'randomly':
             return self.__randomly(words, embeds, vocabulary)
 
@@ -59,14 +82,3 @@ class WordEmbedding:
         header_word, header_embed = words[:self.SHIFT_EMBED], embeds[:self.SHIFT_EMBED]
         words, embeds = self.__strategy(method, words, embeds, vocabulary)
         return self.__write(ouput, header_word + words, header_embed + embeds)
-
-# root = os.path.abspath('jobs')
-# dirs = sorted(os.listdir(root))
-# embeds_path = os.path.join(root, '1588911091.97093', 'checkpoints')
-# # print(embeds_path)
-
-# word_embedding = WordEmbedding(
-#     os.path.join(embeds_path, 'embeds_encoder.txt'),
-#     os.path.join(root, '1588911678.820784', 'bin', 'dict.en.txt')
-# )
-# word_embedding.process_embed('randomly', 'generated_embed.txt')

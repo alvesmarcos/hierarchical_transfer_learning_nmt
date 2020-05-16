@@ -1,5 +1,6 @@
 import os
-from datetime import datetime
+import logging
+import time
 
 import yaml
 
@@ -7,21 +8,20 @@ from train import Train
 from apply_bpe import ApplyBpe
 from learn_bpe import LearnBpe
 from reader import Reader
-from selection import Selection
-from split import Split
+from cleanup import CleanUp
 from writer import Writer
 from binarize import Binarize
 from test import Test
 from score import Score
 from embeds import Embeds
 
+logger = logging.getLogger('pipeline')
+
 class Pipeline:
     def __init__(self, path):
         self.__path = path
-        now = datetime.now()
-        timestamp = datetime.timestamp(now)
         # should be use to create a folder inside jobs/
-        self.__timestamp = str(timestamp)
+        self.__timestamp = time.strftime("%Y-%m-%d@%H.%M.%S")
         self.__group = ''
         
     def __dict_instance(sekf):
@@ -29,8 +29,7 @@ class Pipeline:
             'apply_bpe': ApplyBpe,
             'learn_bpe': LearnBpe,
             'reader': Reader,
-            'selection': Selection,
-            'split': Split,
+            'cleanup': CleanUp,
             'writer': Writer,
             'binarize': Binarize,
             'train': Train,
@@ -62,19 +61,26 @@ class Pipeline:
         folders = ['bin', 'checkpoints', 'data', 'gen', 'log', 'tmp']
         path = os.path.abspath(os.path.join('jobs', self.__group, self.__timestamp))
         os.makedirs(path, exist_ok=True)
+        logger.info(f"Execution folder `{path}` created.")
         for folder in folders:
             os.mkdir(os.path.join(path, folder))
+            logger.info(f'Subdirectory created `{folder}`')
         with open(os.path.join(path, 'description.txt'), 'w') as f:
             f.write(self.__parse_description())
+            logger.info("Description file created in `description.txt`")
 
     def run(self):
-        self.__mount()
-        queue = self.__parse_commands()
-        instances = self.__dict_instance()
-        _input = None
-        for command, params in queue.items():
-            if params == 'no_params':
-                step = instances.get(command)(self.__timestamp, self.__group)
-            else:
-                step = instances.get(command)(self.__timestamp, self.__group, **params)
-            _input = step.routine(_input)
+        try:
+            self.__mount()
+            queue = self.__parse_commands()
+            instances = self.__dict_instance()
+            _input = None
+            for command, params in queue.items():
+                logger.info(f"Running `{command}` with params {params}")
+                if params == 'no_params':
+                    step = instances.get(command)(self.__timestamp, self.__group)
+                else:
+                    step = instances.get(command)(self.__timestamp, self.__group, **params)
+                _input = step.routine(_input)
+        except Exception as ex:
+            logger.error(ex)

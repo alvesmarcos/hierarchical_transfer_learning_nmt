@@ -19,6 +19,10 @@ def language_ext(lang):
         parsed = yaml.load(f, Loader=yaml.FullLoader)
     return parsed['languages'][lang]
 
+def offset(data, frac):
+    total = len(data)
+    return int(total*frac)
+
 def extract_params_from_json(path_json):
     with open(path_json, 'r') as json_file:
         parameters_dict = json.load(json_file)

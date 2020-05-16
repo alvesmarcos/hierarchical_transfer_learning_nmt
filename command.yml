@@ -8,13 +8,18 @@ languages:
 # input command to run the pipeline
 pipeline:
     reader:
-        path: data/eng-fra.txt
-        sample: 0.50
-    selection:
+        train_path:
+            - data/europarl-v7.fr-en.en
+            - data/europarl-v7.fr-en.fr
+        valid_path:
+            - data/tatoeba-valid.fr-en.en
+            - data/tatoeba-valid.fr-en.fr
+        test_path:
+            - data/tatoeba-test.fr-en.en
+            - data/tatoeba-test.fr-en.fr
+        sample: 1
+    cleanup:
         max_length: 15
-    split:
-        valid_size: 0.15
-        test_size: 0.25
     writer: no_params
     learn_bpe:
         bpe_tokens: 10000
@@ -22,6 +27,7 @@ pipeline:
     binarize: no_params
     train:
         json_params: params/train.json
+        pre_load_embed: False
     test:
         json_params: params/test.json
     score: no_params

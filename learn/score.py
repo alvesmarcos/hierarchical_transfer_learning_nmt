@@ -19,6 +19,6 @@ class Score(Step):
         score = os.path.join(root, 'tmp', 'score.txt')
 
         subprocess.call(f"grep ^H {_input} | cut -f3- > {file_hypo}", shell=True)
-        subprocess.call(f"MKL_SERVICE_FORCE_INTEL=1 fairseq-score \
+        subprocess.call(f"MKL_THREADING_LAYER=GNU fairseq-score \
                 --sys {file_hypo} --ref {target_test} | tee {score}", shell=True)
         return None
