@@ -16,6 +16,7 @@ class Writer(Step):
         logger.info('Writer constructed')
         self.timestamp = args[0]
         self.group = args[1]
+        self.src_tgt_dic = args[2]
     
     def __write(self, lang, data):
         path = os.path.abspath(
@@ -31,9 +32,9 @@ class Writer(Step):
         data = ('train.', 'test.', 'valid.')
         source, target = _input
         for src, tar, ext in zip(source, target, data):
-            path = self.__write(ext + utils.language_ext('source'), src)
+            path = self.__write(ext + self.src_tgt_dic.get('source'), src)
             source_paths.append(path)
-            path = self.__write(ext + utils.language_ext('target'), tar)
+            path = self.__write(ext + self.src_tgt_dic.get('target'), tar)
             target_paths.append(path)
         logger.info(f'Output files => Source: {source_paths}, Target: {target_paths}')
         return source_paths, target_paths

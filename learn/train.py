@@ -20,6 +20,7 @@ class Train(Step):
         self.__strategy = kwargs['strategy']
         self.timestamp = args[0]
         self.group = args[1]
+        self.src_tgt_dic = args[2]
     
     def __adapt_embed(self):
         root = os.path.abspath(os.path.join('jobs', self.group))
@@ -29,14 +30,14 @@ class Train(Step):
         embed_encoder_path = os.path.join(root, self.timestamp, 'tmp', 'generated_embeds_encoder.txt')
         word_embedding = WordEmbedding(
             os.path.join(embeds_path, 'embeds_encoder.txt'),
-            os.path.join(root, self.timestamp, 'bin', f"dict.{utils.language_ext('source')}.txt")
+            os.path.join(root, self.timestamp, 'bin', f"dict.{self.src_tgt_dic.get('source')}.txt")
         )
         word_embedding.process_embed(self.__strategy, embed_encoder_path)
         # process decoder
         embed_decoder_path = os.path.join(root, self.timestamp, 'tmp', 'generated_embeds_decoder.txt')
         word_embedding = WordEmbedding(
             os.path.join(embeds_path, 'embeds_decoder.txt'),
-            os.path.join(root, self.timestamp, 'bin', f"dict.{utils.language_ext('target')}.txt")
+            os.path.join(root, self.timestamp, 'bin', f"dict.{self.src_tgt_dic.get('target')}.txt")
         )
         word_embedding.process_embed(self.__strategy, embed_decoder_path)
         return embed_encoder_path, embed_decoder_path

@@ -16,11 +16,12 @@ class Test(Step):
         self.__json_params = kwargs['json_params']
         self.timestamp = args[0]
         self.group = args[1]
+        self.src_tgt_dic = args[2]
     
     def routine(self, _input):
         root = os.path.abspath(os.path.join('jobs', self.group, self.timestamp))
         _bin = os.path.join(root, 'bin')
-        input_test = os.path.join(root, 'data', 'test.'+utils.language_ext('source'))
+        input_test = os.path.join(root, 'data', 'test.'+self.src_tgt_dic.get('source'))
         ouput = os.path.join(root, 'tmp', 'translated.txt')
         params = utils.extract_params_from_json(self.__json_params)        
         

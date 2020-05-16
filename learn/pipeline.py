@@ -22,6 +22,7 @@ class Pipeline:
         self.__path = path
         # should be use to create a folder inside jobs/
         self.__timestamp = time.strftime("%Y-%m-%d@%H.%M.%S")
+        self.__src_tgt_ext = {}
         self.__group = ''
         
     def __dict_instance(sekf):
@@ -46,6 +47,10 @@ class Pipeline:
     def __parse_description(self):
         parsed = self.__parse_yml()
         return parsed.get('description')
+
+    def __parse_languages(self):
+        parsed = self.__parse_yml()
+        return parsed.get('languages')
     
     def __parse_group(self):
         parsed = self.__parse_yml()
@@ -56,6 +61,7 @@ class Pipeline:
         return parsed.get('pipeline')
 
     def __mount(self):
+        self.__src_tgt_ext = self.__parse_languages()
         # initialize group folder 
         self.__group = self.__parse_group()
         folders = ['bin', 'checkpoints', 'data', 'log', 'tmp']
@@ -78,9 +84,9 @@ class Pipeline:
             for command, params in queue.items():
                 logger.info(f"Running `{command}` with params {params}")
                 if params == 'no_params':
-                    step = instances.get(command)(self.__timestamp, self.__group)
+                    step = instances.get(command)(self.__timestamp, self.__group, self.__src_tgt_ext)
                 else:
-                    step = instances.get(command)(self.__timestamp, self.__group, **params)
+                    step = instances.get(command)(self.__timestamp, self.__group, self.__src_tgt_ext, **params)
                 _input = step.routine(_input)
             logger.info("Pipeline ran all steps!")
         except Exception as ex:
