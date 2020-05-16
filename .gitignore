@@ -132,3 +132,5 @@ jobs/*
 !jobs/.gitkeep
 data/*
 !data/.gitkeep
+logs/*
+!logs/.gitkeep
