@@ -17,6 +17,7 @@ class Train(Step):
         logger.info('Train constructed')
         self.__json_params = kwargs['json_params']
         self.__pre_load_embed = kwargs['pre_load_embed']
+        self.__strategy = kwargs['strategy']
         self.timestamp = args[0]
         self.group = args[1]
     
@@ -30,14 +31,14 @@ class Train(Step):
             os.path.join(embeds_path, 'embeds_encoder.txt'),
             os.path.join(root, self.timestamp, 'bin', f"dict.{utils.language_ext('source')}.txt")
         )
-        word_embedding.process_embed('randomly', embed_encoder_path)
+        word_embedding.process_embed(self.__strategy, embed_encoder_path)
         # process decoder
         embed_decoder_path = os.path.join(root, self.timestamp, 'tmp', 'generated_embeds_decoder.txt')
         word_embedding = WordEmbedding(
             os.path.join(embeds_path, 'embeds_decoder.txt'),
             os.path.join(root, self.timestamp, 'bin', f"dict.{utils.language_ext('target')}.txt")
         )
-        word_embedding.process_embed('randomly', embed_decoder_path)
+        word_embedding.process_embed(self.__strategy, embed_decoder_path)
         return embed_encoder_path, embed_decoder_path
 
 
