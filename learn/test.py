@@ -19,8 +19,8 @@ class Test(Step):
         input_test = os.path.join(root, 'gen', 'test.'+utils.language_ext('source'))
         ouput = os.path.join(root, 'tmp', 'translated.txt')
         params = utils.extract_params_from_json(self.__json_params)        
-        subprocess.call(f"MKL_THREADING_LAYER=GNU fairseq-interactive {_bin} \
-            --path {_input}/checkpoint_best.pt \
+        subprocess.call(f"MKL_THREADING_LAYER=GNU fairseq-interactive \"{_bin}\" \
+            --path \"{_input}/checkpoint_best.pt\" \
             {params} --remove-bpe \
-            --tensorboard-logdir {os.path.join(root, 'log')} < {input_test} | tee {ouput}", shell=True)
+            --tensorboard-logdir \"{os.path.join(root, 'log')}\" < \"{input_test}\" | tee \"{ouput}\"", shell=True)
         return ouput

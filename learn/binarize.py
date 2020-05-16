@@ -19,6 +19,6 @@ class Binarize(Step):
         subprocess.call(f"MKL_THREADING_LAYER=GNU fairseq-preprocess \
             --source-lang {utils.language_ext('source')} \
             --target-lang {utils.language_ext('target')} \
-            --trainpref {path}/train --validpref {path}/valid --testpref {path}/test \
-            --destdir {output}", shell=True)
+            --trainpref \"{path}/train\" --validpref \"{path}/valid\" --testpref \"{path}/test\" \
+            --destdir \"{output}\"", shell=True)
         return output

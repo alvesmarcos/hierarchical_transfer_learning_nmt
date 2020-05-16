@@ -19,7 +19,7 @@ class LearnBpe(Step):
         source_paths, target_paths = _input
         # concat all train and validation (first two paths) files (source and target)
         subprocess.call(
-            f"cat {source_paths[0]} {source_paths[1]} {target_paths[0]} {target_paths[1]} > {tmp_concated}", shell=True)
+            f"cat \"{source_paths[0]}\" \"{source_paths[1]}\" \"{target_paths[0]}\" \"{target_paths[1]}\" > \"{tmp_concated}\"", shell=True)
         subprocess.call(
-            f"subword-nmt learn-bpe -s {self.__bpe_tokens} < {tmp_concated} > {outfile}", shell=True)
+            f"subword-nmt learn-bpe -s {self.__bpe_tokens} < \"{tmp_concated}\" > \"{outfile}\"", shell=True)
         return _input, outfile

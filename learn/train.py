@@ -45,9 +45,9 @@ class Train(Step):
 
         if self.__pre_load_embed:
             embed_encoder_path, embed_decoder_path = self.__adapt_embed()
-            embed_params = f"--encoder-embed-path {embed_encoder_path} --decoder-embed-path {embed_decoder_path}"
+            embed_params = f"--encoder-embed-path \"{embed_encoder_path}\" --decoder-embed-path \"{embed_decoder_path}\""
 
-        subprocess.call(f"CUDA_VISIBLE_DEVICES=0 fairseq-train {_input} \
-            {params} {embed_params} --save-dir {output} \
-            --tensorboard-logdir {os.path.join(root, 'log')}", shell=True)
+        subprocess.call(f"CUDA_VISIBLE_DEVICES=0 fairseq-train \"{_input}\" \
+            {params} {embed_params} --save-dir \"{output}\" \
+            --tensorboard-logdir \"{os.path.join(root, 'log')}\"", shell=True)
         return output
