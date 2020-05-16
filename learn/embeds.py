@@ -1,4 +1,5 @@
 import os
+import logging
 
 import torch
 from fairseq.models.lightconv import LightConvModel
@@ -7,11 +8,14 @@ import numpy as np
 import utils
 from step import Step
 
+logger = logging.getLogger('pipeline')
+
 class Embeds(Step):
     command_name = 'embeds'
     timestamp = None
 
     def __init__(self, *args, **kwargs):
+        logger.info('Embeds constructed')
         self.timestamp = args[0]
         self.group = args[1]
     
@@ -22,7 +26,7 @@ class Embeds(Step):
             checkpoint_file='checkpoint_best.pt',
             data_name_or_path=os.path.join(root, 'bin'),
             bpe='subword_nmt',
-            bpe_codes=os.path.join(root, 'gen', 'bpe_code.txt')
+            bpe_codes=os.path.join(root, 'data', 'bpe_code.txt')
         )
         return model
 
@@ -49,4 +53,5 @@ class Embeds(Step):
             model.src_dict.indices, model.src_dict.symbols)
         self.__write('embeds_decoder.txt', embeds_decoder,
             model.tgt_dict.indices, model.tgt_dict.symbols)
+        logger.info('Embeds saved encoder/decoder')
         return None

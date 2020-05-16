@@ -58,7 +58,7 @@ class Pipeline:
     def __mount(self):
         # initialize group folder 
         self.__group = self.__parse_group()
-        folders = ['bin', 'checkpoints', 'data', 'gen', 'log', 'tmp']
+        folders = ['bin', 'checkpoints', 'data', 'log', 'tmp']
         path = os.path.abspath(os.path.join('jobs', self.__group, self.__timestamp))
         os.makedirs(path, exist_ok=True)
         logger.info(f"Execution folder `{path}` created.")
@@ -82,5 +82,6 @@ class Pipeline:
                 else:
                     step = instances.get(command)(self.__timestamp, self.__group, **params)
                 _input = step.routine(_input)
+            logger.info("Pipeline ran all steps!")
         except Exception as ex:
             logger.error(ex)

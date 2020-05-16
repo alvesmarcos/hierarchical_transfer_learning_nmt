@@ -1,16 +1,20 @@
 import os
 import subprocess
 import json
+import logging
 
 import utils
 from step import Step
 from word_embedding import WordEmbedding
+
+logger = logging.getLogger('pipeline')
 
 class Train(Step):
     command_name = 'train'
     timestamp = None    
 
     def __init__(self, *args, **kwargs):
+        logger.info('Train constructed')
         self.__json_params = kwargs['json_params']
         self.__pre_load_embed = kwargs['pre_load_embed']
         self.timestamp = args[0]
@@ -45,9 +49,14 @@ class Train(Step):
 
         if self.__pre_load_embed:
             embed_encoder_path, embed_decoder_path = self.__adapt_embed()
+            logger.info(f'Load embeds for Encoder: {embed_encoder_path} - Decoder: {embed_encoder_path}')
             embed_params = f"--encoder-embed-path \"{embed_encoder_path}\" --decoder-embed-path \"{embed_decoder_path}\""
+
+        logger.info('Start training...')
 
         subprocess.call(f"CUDA_VISIBLE_DEVICES=0 fairseq-train \"{_input}\" \
             {params} {embed_params} --save-dir \"{output}\" \
             --tensorboard-logdir \"{os.path.join(root, 'log')}\"", shell=True)
+        
+        logger.info('Train finished!')
         return output
