@@ -17,7 +17,7 @@ pipeline:
         test_path:
             - data/tatoeba-test.fr-en.en
             - data/tatoeba-test.fr-en.fr
-        sample: 0.5
+        sample: 0.75
     cleanup:
         max_length: 15
     writer: no_params
