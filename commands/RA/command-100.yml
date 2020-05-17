@@ -29,7 +29,7 @@ pipeline:
         json_params: params/train.json
         pre_load_embed: False
         strategy: null
+    embeds: no_params
     test:
         json_params: params/test.json
     score: no_params
-    embeds: no_params

@@ -17,7 +17,7 @@ pipeline:
         test_path:
             - data/tatoeba-test.fr-en.en
             - data/tatoeba-test.fr-en.fr
-        sample: 0.75
+        sample: 0.5
     cleanup:
         max_length: 15
     writer: no_params
@@ -29,7 +29,7 @@ pipeline:
         json_params: params/train.json
         pre_load_embed: False
         strategy: null
+    embeds: no_params
     test:
         json_params: params/test.json
     score: no_params
-    embeds: no_params
