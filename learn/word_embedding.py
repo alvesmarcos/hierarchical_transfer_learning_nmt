@@ -36,7 +36,7 @@ class WordEmbedding:
 
     def __write(self, ouput, words, embeds):
         with open(ouput, 'w') as f:
-            f.write(f"{len(words)} {self.DIMENSION}")
+            f.write(f"{len(words)} {self.DIMENSION}\n")
             for word, embed in zip(words, embeds):
                 f.write(word + ' ' + embed + '\n')
         return ouput
@@ -57,8 +57,8 @@ class WordEmbedding:
         return _max, _min
 
     def __randomly(self, words, embeds, vocabulary):
-        _max, _min = self.__search_max_min_interval(embeds)
-        logger.info(f'Random normal distribution interval [{_min}, {_max}]')
+        _max, _ = self.__search_max_min_interval(embeds)
+        logger.info(f'Random normal distribution interval {_max}')
         words_out = list()
         embeds_out = list()
         for token in vocabulary:
@@ -66,7 +66,7 @@ class WordEmbedding:
             if token in words:
                 embeds_out.append(embeds[words.index(token)])
             else:
-                embed = np.random.normal([_min, _max], self.DIMENSION).tolist()
+                embed = np.random.normal(0, abs(_max), self.DIMENSION).tolist()
                 embed_str = str(embed)[1:-1]
                 embeds_out.append(embed_str.replace(',', ''))
         return words_out, embeds_out                
