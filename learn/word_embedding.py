@@ -36,8 +36,9 @@ class WordEmbedding:
 
     def __write(self, ouput, words, embeds):
         with open(ouput, 'w') as f:
+            f.write(f"{len(words)} {self.DIMENSION}")
             for word, embed in zip(words, embeds):
-                f.write(word + ': ' + embed + '\n')
+                f.write(word + ' ' + embed + '\n')
         return ouput
 
     def __search_max_min_interval(self, embeds):
