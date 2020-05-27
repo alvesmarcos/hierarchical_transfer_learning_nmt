@@ -8,8 +8,8 @@ languages:
 pipeline:
     reader:
         train_path:
-            - data/europarl-v7.fr-en.en
-            - data/europarl-v7.fr-en.fr
+            - data/tatoeba-train.fr-en.en
+            - data/tatoeba-train.fr-en.fr
         valid_path:
             - data/tatoeba-valid.fr-en.en
             - data/tatoeba-valid.fr-en.fr
