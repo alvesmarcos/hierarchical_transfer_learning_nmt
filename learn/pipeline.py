@@ -5,8 +5,6 @@ import time
 import yaml
 
 from train import Train
-from apply_bpe import ApplyBpe
-from learn_bpe import LearnBpe
 from reader import Reader
 from cleanup import CleanUp
 from writer import Writer
@@ -27,8 +25,6 @@ class Pipeline:
         
     def __dict_instance(sekf):
         return {
-            'apply_bpe': ApplyBpe,
-            'learn_bpe': LearnBpe,
             'reader': Reader,
             'cleanup': CleanUp,
             'writer': Writer,

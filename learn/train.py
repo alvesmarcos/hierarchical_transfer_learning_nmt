@@ -18,14 +18,14 @@ class Train(Step):
         self.__json_params = kwargs['json_params']
         self.__pre_load_embed = kwargs['pre_load_embed']
         self.__strategy = kwargs['strategy']
+        self.__embed_folder = kwargs['embed_folder']
         self.timestamp = args[0]
         self.group = args[1]
         self.src_tgt_dic = args[2]
     
     def __adapt_embed(self):
         root = os.path.abspath(os.path.join('jobs', self.group))
-        dirs = sorted(os.listdir(root))
-        embeds_path = os.path.join(root, dirs[-2], 'checkpoints')
+        embeds_path = os.path.join(self.__embed_folder, 'checkpoints')
         # process enconder
         embed_encoder_path = os.path.join(root, self.timestamp, 'tmp', 'generated_embeds_encoder.txt')
         word_embedding = WordEmbedding(

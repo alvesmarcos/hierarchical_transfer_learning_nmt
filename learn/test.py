@@ -29,7 +29,7 @@ class Test(Step):
         
         subprocess.call(f"MKL_THREADING_LAYER=GNU fairseq-interactive \"{_bin}\" \
             --path \"{os.path.join(root, 'checkpoints')}/checkpoint_best.pt\" \
-            {params} --remove-bpe \
+            {params} \
             --tensorboard-logdir \"{os.path.join(root, 'log')}\" < \"{input_test}\" | tee \"{ouput}\"", shell=True)
         
         logger.info('Test finished!')

@@ -20,7 +20,7 @@ class Writer(Step):
     
     def __write(self, lang, data):
         path = os.path.abspath(
-            os.path.join('jobs', self.group, self.timestamp, 'data', lang + '.txt'))
+            os.path.join('jobs', self.group, self.timestamp, 'data', lang))
         with open(path, 'w') as f:
             for line in data:
                 f.write(f"{line}\n")

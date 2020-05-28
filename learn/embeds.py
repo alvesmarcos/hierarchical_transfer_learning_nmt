@@ -24,9 +24,7 @@ class Embeds(Step):
         model = LightConvModel.from_pretrained(
             os.path.join(root, 'checkpoints'),
             checkpoint_file='checkpoint_best.pt',
-            data_name_or_path=os.path.join(root, 'bin'),
-            bpe='subword_nmt',
-            bpe_codes=os.path.join(root, 'data', 'bpe_code.txt')
+            data_name_or_path=os.path.join(root, 'bin')
         )
         return model
 
