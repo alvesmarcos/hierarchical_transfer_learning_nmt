@@ -28,6 +28,7 @@ pipeline:
     train:
         json_params: params/train.json
         pre_load_embed: True
+        embed_folder: jobs/RA/2020-05-27@00.59.43
         strategy: randomly
     embeds: no_params
     test:

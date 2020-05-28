@@ -19,15 +19,13 @@ pipeline:
             - data/tatoeba-test.fr-en.fr
         sample: 0.75
     cleanup:
-        max_length: 15
+        max_length: 50
     writer: no_params
-    learn_bpe:
-        bpe_tokens: 10000
-    apply_bpe: no_params
     binarize: no_params
     train:
         json_params: params/train.json
         pre_load_embed: False
+        embed_folder: null
         strategy: null
     embeds: no_params
     test:
