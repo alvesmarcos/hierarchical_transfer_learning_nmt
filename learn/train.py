@@ -57,7 +57,9 @@ class Train(Step):
         logger.info('Start training...')
 
         subprocess.call(f"CUDA_VISIBLE_DEVICES=0 fairseq-train \"{_input}\" \
-            {params} {embed_params} --save-dir \"{output}\" \
+            {params} {embed_params} --save-dir \"{output}\"  \
+            --source-lang {self.src_tgt_dic.get('source')} \
+            --target-lang {self.src_tgt_dic.get('target')} \
             --tensorboard-logdir \"{os.path.join(root, 'log')}\"", shell=True)
         
         logger.info('Train finished!')
