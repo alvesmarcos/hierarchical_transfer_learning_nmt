@@ -12,9 +12,10 @@ from word_embedding import WordEmbedding
 timestamp = time.strftime("%Y-%m-%d.%H.%M.%S")
 
 
-def create_dirs():
+def create_dirs(sample, strategy):
     folders = ['checkpoints', 'tmp', 'log', 'embeds']
-    path = os.path.abspath(f".train@{timestamp}")
+    strategy = 'fairseq' if strategy is None else strategy
+    path = os.path.abspath(f".train__{strategy}__{int(sample*100)}@{timestamp}")
     os.makedirs(path, exist_ok=True)
     for folder in folders:
         os.mkdir(os.path.join(path, folder))
@@ -67,8 +68,8 @@ def write_embeds(path, name, embeds, indices, symbols):
             fd.write(word + ': ' + word_embed_str.replace(',', '') + '\n')
 
 
-def train(bin_path, fairseq_params, source_lang, target_lang, save_embeds=True, pre_trained=False, embed_path='', strategy=None):
-    path = create_dirs()
+def train(bin_path, fairseq_params, source_lang, target_lang, sample=1, save_embeds=True, pre_trained=False, embed_path='', strategy=None):
+    path = create_dirs(sample, strategy)
     params = extract_params_from_json(fairseq_params)
     embed_params = ''
 
@@ -101,4 +102,4 @@ if __name__ == "__main__":
     fire.Fire(train)
 
 # to run: [MA]
-# python tasks/train.py --bin_path=.data100@2020-05-30.06.17.06/ --fairseq_params=params/train.json --source_lang=en --target_lang=fr
+# python tasks/train.py --bin_path=.data100@2020-05-30.06.17.06/ --fairseq_params=params/train.json --source_lang=en --target_lang=fr sample=1
