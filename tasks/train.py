@@ -15,28 +15,29 @@ timestamp = time.strftime("%Y-%m-%d.%H.%M.%S")
 def create_dirs(sample, strategy):
     folders = ['checkpoints', 'tmp', 'log', 'embeds']
     strategy = 'fairseq' if strategy is None else strategy
-    path = os.path.abspath(f".train__{strategy}__{int(sample*100)}@{timestamp}")
+    path = os.path.abspath(
+        f".train__{strategy}__{int(sample*100)}@{timestamp}")
     os.makedirs(path, exist_ok=True)
     for folder in folders:
         os.mkdir(os.path.join(path, folder))
     return path
 
 
-def adapt_embed(path, embed_path, strategy, source_lang, target_lang):
+def adapt_embed(path, bin_path, embed_path, strategy, source_lang, target_lang):
     # process enconder [MA]
     embed_encoder_path = os.path.join(
         path, 'tmp', 'generated_embeds_encoder.txt')
     word_embedding = WordEmbedding(
-        os.path.join(embed_path, 'embeds_encoder.txt'),
-        os.path.join(path, 'bin', f"dict.{source_lang}.txt")
+        os.path.join(os.path.abspath(embed_path), 'best_embeds_encoder.txt'),
+        os.path.join(os.path.abspath(bin_path), f"dict.{source_lang}.txt")
     )
     word_embedding.process_embed(strategy, embed_encoder_path)
     # process decoder [MA]
     embed_decoder_path = os.path.join(
         path, 'tmp', 'generated_embeds_decoder.txt')
     word_embedding = WordEmbedding(
-        os.path.join(embed_path, 'embeds_decoder.txt'),
-        os.path.join(path, 'bin', f"dict.{target_lang}.txt")
+        os.path.join(os.path.abspath(embed_path), 'best_embeds_decoder.txt'),
+        os.path.join(os.path.abspath(bin_path), f"dict.{target_lang}.txt")
     )
     word_embedding.process_embed(strategy, embed_decoder_path)
     return embed_encoder_path, embed_decoder_path
@@ -75,7 +76,7 @@ def train(bin_path, fairseq_params, source_lang, target_lang, sample=1, save_emb
 
     if pre_trained:
         embed_encoder_path, embed_decoder_path = adapt_embed(
-            path, embed_path, strategy, source_lang, target_lang)
+            path, bin_path, embed_path, strategy, source_lang, target_lang)
         embed_params = f"--encoder-embed-path \"{embed_encoder_path}\" --decoder-embed-path \"{embed_decoder_path}\""
 
     subprocess.call(f"CUDA_VISIBLE_DEVICES=0 fairseq-train \"{bin_path}\" \
@@ -103,3 +104,4 @@ if __name__ == "__main__":
 
 # to run: [MA]
 # python tasks/train.py --bin_path=.data100@2020-05-30.06.17.06/ --fairseq_params=params/train.json --source_lang=en --target_lang=fr sample=1
+# python tasks/train.py --bin_path=.data75@2020-06-02.00.02.42/ --fairseq_params=params/train.json --sample=0.75 --source_lang=en --target_lang=fr --pre_trained --embed_path=.train__fairseq__50@2020-06-01.23.41.06/embeds/ --strategy=randomly

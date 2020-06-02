@@ -1,15 +1,15 @@
 import os
-import logging
 
 import numpy as np
 
-logger = logging.getLogger('pipeline')
+from text_similarity import TextSimilarity
+
 
 class WordEmbedding:
     # consts to WordEmbedding
     SHIFT_EMBED = 4
     DIMENSION = 512
-    METHODS = ['randomly']
+    METHODS = ['randomly', 'similarity']
 
     def __init__(self, embed_file, dict_file):
         self.embed_file = embed_file
@@ -30,8 +30,6 @@ class WordEmbedding:
             for line in f:
                 content = line.split()
                 vocabulary.append(content[0])
-        logger.info(f"Embed file path `{self.embed_file}` with {len(words)} words")
-        logger.info(f"Dictionary file path `{self.embed_file}` with {len(vocabulary)} symbols")
         return words, embeds, vocabulary
 
     def __write(self, ouput, words, embeds):
@@ -56,9 +54,24 @@ class WordEmbedding:
             flag = False
         return _max, _min
 
+    def __similarity(self, words, embeds, vocabulary, algorithm="levenshtein"):
+        words_out = list()
+        embeds_out = list()
+        for token in vocabulary:
+            words_out.append(token)
+            if token in words:
+                embeds_out.append(embeds[words.index(token)])
+            else:
+                ts = TextSimilarity(words, embeds, vocabulary)
+                # Procura a primeira palavra mais próxima em 0.7 de distancia, max 1.
+                embed = ts.search(token)
+                embed = embed.split()
+                embed_str = str(embed)[1:-1]
+                embeds_out.append(embed_str.replace(',', ''))
+        return words_out, embeds_out
+
     def __randomly(self, words, embeds, vocabulary):
         _max, _ = self.__search_max_min_interval(embeds)
-        logger.info(f'Random normal distribution interval {_max}')
         words_out = list()
         embeds_out = list()
         for token in vocabulary:
@@ -69,12 +82,13 @@ class WordEmbedding:
                 embed = np.random.normal(0, abs(_max), self.DIMENSION).tolist()
                 embed_str = str(embed)[1:-1]
                 embeds_out.append(embed_str.replace(',', ''))
-        return words_out, embeds_out                
+        return words_out, embeds_out
 
     def __strategy(self, name, words, embeds, vocabulary):
-        logger.info(f"Word embedding method is `{name}`")
         if name == 'randomly':
             return self.__randomly(words, embeds, vocabulary)
+        elif name == 'similarity':
+            return self.__similarity(words, embeds, vocabulary)
 
     def process_embed(self, method, ouput):
         if not method in self.METHODS:
