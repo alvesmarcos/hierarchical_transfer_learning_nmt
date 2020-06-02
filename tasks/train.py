@@ -8,6 +8,7 @@ import torch
 from fairseq.models.lightconv import LightConvModel
 
 from word_embedding import WordEmbedding
+from utils import extract_params_from_json
 
 timestamp = time.strftime("%Y-%m-%d.%H.%M.%S")
 
@@ -41,15 +42,6 @@ def adapt_embed(path, bin_path, embed_path, strategy, source_lang, target_lang):
     )
     word_embedding.process_embed(strategy, embed_decoder_path)
     return embed_encoder_path, embed_decoder_path
-
-
-def extract_params_from_json(path_json):
-    with open(path_json, 'r') as json_file:
-        parameters_dict = json.load(json_file)
-    str_parameters = ''
-    for key, value in parameters_dict[0].items():
-        str_parameters += f' {key} {value}'
-    return str_parameters
 
 
 def load_best_model(path, data_path, checkpoint_name):

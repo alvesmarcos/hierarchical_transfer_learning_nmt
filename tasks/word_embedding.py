@@ -67,7 +67,7 @@ class WordEmbedding:
                 embed = ts.search(token)
                 embed = embed.split()
                 embed_str = str(embed)[1:-1]
-                embeds_out.append(embed_str.replace(',', ''))
+                embeds_out.append(embed_str.replace(',', '').replace("'", ''))
         return words_out, embeds_out
 
     def __randomly(self, words, embeds, vocabulary):
