@@ -7,4 +7,4 @@ def extract_params_from_json(path_json):
     str_parameters = ''
     for key, value in parameters_dict[0].items():
         str_parameters += f' {key} {value}'
-    return str_parameters
+    return str_parameters, parameters_dict[0]

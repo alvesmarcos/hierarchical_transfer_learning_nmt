@@ -20,7 +20,7 @@ def test(bin_path, train_path, fairseq_params, source_lang, target_lang):
         os.path.join(bin_path, 'test.'+target_lang))
     bin_path = os.path.abspath(bin_path)
     train_path = os.path.abspath(train_path)
-    params = extract_params_from_json(fairseq_params)
+    params, _ = extract_params_from_json(fairseq_params)
 
     subprocess.call(f"MKL_THREADING_LAYER=GNU fairseq-interactive \"{bin_path}/\" \
             --path \"{os.path.join(train_path, 'checkpoints')}/checkpoint_best.pt\" \
@@ -36,3 +36,6 @@ def test(bin_path, train_path, fairseq_params, source_lang, target_lang):
 
 if __name__ == "__main__":
     fire.Fire(test)
+
+# to run:
+# python tasks/test.py --bin_path=.data50@2020-06-01.23.40.13/ --train_path=.train__fairseq__50@2020-06-01.23.41.06/ --fairseq_params=params/test.json --source_lang=en --target_lang=fr

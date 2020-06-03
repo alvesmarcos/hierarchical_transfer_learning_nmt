@@ -11,7 +11,7 @@ timestamp = time.strftime("%Y-%m-%d.%H.%M.%S")
 offset = lambda data, frac: int(len(data)*frac)
 
 def create_dirs(sample=1):
-    path = os.path.abspath(f".data{int(sample*100)}@{timestamp}")
+    path = os.path.abspath(f"dump/data{int(sample*100)}@{timestamp}")
     os.makedirs(path, exist_ok=True)
     return path
 
@@ -30,7 +30,7 @@ def normalize_string(s):
 
 def read_corpus(path, source_lang, target_lang, sample=1):
     src_path = path + source_lang
-    tgt_path = path + source_lang
+    tgt_path = path + target_lang
     src_sentences = list()
     tgt_sentences = list()
 

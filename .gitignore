@@ -135,4 +135,8 @@ data/*
 logs/*
 !logs/.gitkeep
 .vscode
-.*/
+data*/
+train*/
+test*/
+dump/*
+!dump/.gitkeep

@@ -13,11 +13,11 @@ from utils import extract_params_from_json
 timestamp = time.strftime("%Y-%m-%d.%H.%M.%S")
 
 
-def create_dirs(sample, strategy):
+def create_dirs(arch, sample, strategy):
     folders = ['checkpoints', 'tmp', 'log', 'embeds']
     strategy = 'fairseq' if strategy is None else strategy
     path = os.path.abspath(
-        f".train__{strategy}__{int(sample*100)}@{timestamp}")
+        f"dump/train__{arch}__{strategy}__{int(sample*100)}@{timestamp}")
     os.makedirs(path, exist_ok=True)
     for folder in folders:
         os.mkdir(os.path.join(path, folder))
@@ -62,8 +62,8 @@ def write_embeds(path, name, embeds, indices, symbols):
 
 
 def train(bin_path, fairseq_params, source_lang, target_lang, sample=1, save_embeds=True, pre_trained=False, embed_path='', strategy=None):
-    path = create_dirs(sample, strategy)
-    params = extract_params_from_json(fairseq_params)
+    params, params_dict = extract_params_from_json(fairseq_params)
+    path = create_dirs(params_dict['--arch'], sample, strategy)
     embed_params = ''
 
     if pre_trained:
@@ -78,7 +78,7 @@ def train(bin_path, fairseq_params, source_lang, target_lang, sample=1, save_emb
         --tensorboard-logdir \"{os.path.join(path, 'log')}\"", shell=True)
 
     if save_embeds:
-        checkpoints_name = ['checkpoint_best.pt', 'checkpoint_last.pt']
+        checkpoints_name = ['checkpoint_best.pt']
         for name in checkpoints_name:
             model = load_best_model(path, bin_path, name)
             embeds_encoder = model.models[0].encoder.embed_tokens
@@ -95,5 +95,5 @@ if __name__ == "__main__":
     fire.Fire(train)
 
 # to run: [MA]
-# python tasks/train.py --bin_path=.data100@2020-05-30.06.17.06/ --fairseq_params=params/train.json --source_lang=en --target_lang=fr sample=1
+# python tasks/train.py --bin_path=.data100@2020-05-30.06.17.06/ --fairseq_params=params/train.json --source_lang=en --target_lang=fr --sample=1
 # python tasks/train.py --bin_path=.data75@2020-06-02.00.02.42/ --fairseq_params=params/train.json --sample=0.75 --source_lang=en --target_lang=fr --pre_trained --embed_path=.train__fairseq__50@2020-06-01.23.41.06/embeds/ --strategy=randomly
