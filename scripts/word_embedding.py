@@ -9,7 +9,8 @@ class WordEmbedding:
     # consts to WordEmbedding
     SHIFT_EMBED = 4
     DIMENSION = 512
-    METHODS = ['randomly', 'similarity']
+    METHODS = ['randomly', 'similarity', 'glove300_pretrained']
+    PRE_TRAINED_EMBED_FILE = 'glove.840B.300d.txt'
 
     def __init__(self, embed_file, dict_file):
         self.embed_file = embed_file
@@ -84,11 +85,44 @@ class WordEmbedding:
                 embeds_out.append(embed_str.replace(',', ''))
         return words_out, embeds_out
 
+    def __glove_pre_trained(self, words, embeds, vocabulary):
+        words_out = list()
+        embeds_out = list()
+        words_pre_trained = list()
+        embeds_pre_trained = list()
+        embed_path = os.path.abspath(os.path.join(
+            'data', self.PRE_TRAINED_EMBED_FILE))
+        with open(embed_path, 'r') as fd:
+            for line in fd:
+                content = line.split(' ', 1)
+                word, embed = content[0], content[1]
+                words_pre_trained.append(word)
+                embeds_pre_trained.append(embed[:-1])
+        _max, _min = self.__search_max_min_interval(embeds)
+        
+        for token in vocabulary:
+            words_out.append(token)
+            if token in words:
+                embeds_out.append(embeds[words.index(token)])
+            elif token in words_pre_trained:
+                index = words_pre_trained.index(token)
+                zeros = np.zeros(212).tolist()
+                zeros_str = str(zeros)[1:-1]
+                embed = embeds_pre_trained[index] + ' ' + zeros_str.replace(',', '')
+                embeds_out.append(embed)
+            else:
+                embed = np.random.uniform(_min, _max, self.DIMENSION).tolist()
+                embed_str = str(embed)[1:-1]
+                embeds_out.append(embed_str.replace(',', ''))
+        return words_out, embeds_out
+
     def __strategy(self, name, words, embeds, vocabulary):
         if name == 'randomly':
             return self.__randomly(words, embeds, vocabulary)
         elif name == 'similarity':
             return self.__similarity(words, embeds, vocabulary)
+        elif name == 'glove300_pretrained':
+            return self.__glove_pre_trained(words, embeds, vocabulary)
 
     def process_embed(self, method, ouput):
         if not method in self.METHODS:
