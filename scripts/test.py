@@ -3,12 +3,13 @@ import subprocess
 
 import fire
 
-from utils import extract_params_from_json
+from utils import extract_params_from_json, write_commit_hash
 
 
 def create_dir(train_path):
     path = os.path.abspath(train_path.replace('train', 'test'))
     os.makedirs(path, exist_ok=True)
+    write_commit_hash(os.path.join(path, 'commit.txt'))
     return path
 
 

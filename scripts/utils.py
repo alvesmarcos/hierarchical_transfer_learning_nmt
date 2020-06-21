@@ -1,4 +1,11 @@
+import subprocess
 import json
+
+
+def write_commit_hash(path):
+    with open(path, 'w') as fd:
+        fd.write(subprocess.check_output(
+            ["git", "describe", "--always"]).strip().decode())
 
 
 def extract_params_from_json(path_json):

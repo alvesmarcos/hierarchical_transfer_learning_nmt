@@ -8,7 +8,7 @@ import torch
 from fairseq.models.lightconv import LightConvModel
 
 from word_embedding import WordEmbedding
-from utils import extract_params_from_json
+from utils import extract_params_from_json, write_commit_hash
 
 timestamp = time.strftime("%Y-%m-%d.%H.%M.%S")
 
@@ -19,6 +19,7 @@ def create_dirs(arch, sample, strategy):
     path = os.path.abspath(
         f"dump/train__{arch}__{strategy}__{int(sample*100)}@{timestamp}")
     os.makedirs(path, exist_ok=True)
+    write_commit_hash(os.path.join(path, 'commit.txt'))
     for folder in folders:
         os.mkdir(os.path.join(path, folder))
     return path
@@ -78,6 +79,7 @@ def train(bin_path, fairseq_params, source_lang, target_lang, sample=1, save_emb
         --tensorboard-logdir \"{os.path.join(path, 'log')}\"", shell=True)
 
     if save_embeds:
+        # if want save the embeds from a specific model you can put  which model in this array [MA]
         checkpoints_name = ['checkpoint_best.pt']
         for name in checkpoints_name:
             model = load_best_model(path, bin_path, name)

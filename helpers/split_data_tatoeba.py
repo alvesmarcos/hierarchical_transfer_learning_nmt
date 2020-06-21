@@ -1,5 +1,4 @@
-import argparse
-
+import fire
 from sklearn.model_selection import train_test_split
 
 
@@ -65,12 +64,4 @@ def run(path):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='Helper to split the Tatoeba dataset')
-    # add arguments
-    parser.add_argument(
-        'path', type=str, help='The path of the Tatoeba English-French dataset')
-    # process args
-    args = parser.parse_args()
-    # run script
-    run(args.path)
+    fire.Fire(run)
