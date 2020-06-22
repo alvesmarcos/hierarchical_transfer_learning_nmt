@@ -1,6 +1,6 @@
 [
   {
-    "--arch": "lightconv_iwslt_de_en",
+    "--arch": "transformer_iwslt_de_en",
     "--optimizer": "adam",
     "--adam-betas": "'(0.9, 0.98)'",
     "--clip-norm": "0.0",

@@ -11,7 +11,7 @@
     "--keep-interval-updates": "20",
     "--dropout": "0.0",
     "--max-tokens": "4096",
-    "--max-epoch": "150",
+    "--max-epoch": "200",
     "--no-epoch-checkpoints": "",
     "--no-last-checkpoints": ""
   }
