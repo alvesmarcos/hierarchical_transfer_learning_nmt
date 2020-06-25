@@ -12,14 +12,14 @@ def run(path, output):
     gi = list()
     for _, row in df.iterrows():
         score = row['Score'].split('%')[0]
-        if float(score) > 50:
+        if float(score) > 50 and len(row['GR']) < 100 and len(row['GI']) < 100:
             gr.append(row['GR'])
             gi.append(row['GI'])
     assert len(gr) == len(gi)
     
     with open(os.path.join(output, 'corpus_vlibras.csv'), 'w') as fd:
         for sentence_gr, sentence_gi in zip(gr, gi):
-            fd.write(f'"{sentence_gr}","{sentence_gi}"\n')
+            fd.write(f'{sentence_gr},{sentence_gi}\n')
     
 if __name__ == "__main__":
     fire.Fire(run)
