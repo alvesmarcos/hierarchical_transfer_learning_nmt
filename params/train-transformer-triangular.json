@@ -1,23 +1,24 @@
 [
   {
-    "--arch": "lightconv_iwslt_de_en",
+    "--arch": "transformer_iwslt_de_en",
     "--optimizer": "adam",
     "--adam-betas": "'(0.9, 0.98)'",
-    "--clip-norm": "0.0",
-    "--lr-scheduler": "inverse_sqrt",
-    "--warmup-init-lr": "1e-07",
-    "--warmup-updates": "4000",
+    "--clip-norm": "1.0",
+    "--lr-scheduler": "triangular", 
     "--lr": "0.0005",
+    "--max-lr": "0.001",
     "--min-lr": "1e-09",
     "--criterion": "label_smoothed_cross_entropy",
     "--label-smoothing": "0.1",
     "--weight-decay": "0.0",
+    "--max-tokens": "4096",
     "--update-freq": "8",
     "--log-interval": "50",
     "--save-interval-updates": "1000",
-    "--keep-interval-updates": "20",
-    "--dropout": "0.1",
-    "--max-epoch": "250",
-    "--max-tokens": "4096"
+    "--keep-interval-updates": "8",
+    "--dropout": "0.15",
+    "--max-epoch": "150",
+    "--no-epoch-checkpoints": "",
+    "--no-last-checkpoints": ""
   }
 ]
