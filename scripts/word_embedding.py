@@ -105,7 +105,7 @@ class WordEmbedding:
             if token in words:
                 embeds_out.append(embeds[words.index(token)])
             elif token.lower() in words_pre_trained:
-                index = words_pre_trained.index(token)
+                index = words_pre_trained.index(token.lower())
                 zeros = np.zeros(212).tolist()
                 zeros_str = str(zeros)[1:-1]
                 embed = embeds_pre_trained[index] + ' ' + zeros_str.replace(',', '')
