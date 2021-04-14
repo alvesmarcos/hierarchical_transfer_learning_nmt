@@ -4,9 +4,11 @@ from sklearn.model_selection import train_test_split
 
 
 def split(data_src, data_tgt):
+    X_train, X_test, y_train, y_test = train_test_split(
+        data_src, data_tgt, test_size=0.085)
     X_train, X_valid, y_train, y_valid = train_test_split(
-        data_src, data_tgt, test_size=0.2)
-    return [X_train, X_valid], [y_train, y_valid]
+        X_train, y_train, test_size=0.097)
+    return [X_train, X_valid, X_test], [y_train, y_valid, y_test]
 
 
 def read(path):
@@ -27,13 +29,13 @@ def write(path, data):
 
 
 def run(path_train_valid, path_test, prefix_src, prefix_tgt):
-    base_path = ('data/libras-train.',
-                 'data/libras-valid.', 'data/libras-test.')
+    base_path = ('data/librasV11-2-train.',
+                 'data/librasV11-2-valid.', 'data/librasV11-2-test.')
     source_path = [name + prefix_src for name in base_path]
     target_path = [name + prefix_tgt for name in base_path]
     source, target = read(path_train_valid)
     src_data, tgt_data = split(source, target)
-    source, target = read(path_test)
+    # source, target = read(path_test)
     src_data.append(source)
     tgt_data.append(target)
 

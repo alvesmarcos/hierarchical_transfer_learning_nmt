@@ -1,10 +1,9 @@
-
 [
   {
     "--arch": "lightconv_iwslt_de_en",
     "--optimizer": "adam",
     "--adam-betas": "'(0.9, 0.98)'",
-    "--clip-norm": "1.0",
+    "--clip-norm": "0.0",
     "--lr-scheduler": "inverse_sqrt",
     "--warmup-init-lr": "1e-07",
     "--warmup-updates": "4000",
@@ -16,8 +15,8 @@
     "--update-freq": "8",
     "--log-interval": "50",
     "--save-interval-updates": "1000",
-    "--keep-interval-updates": "8",
-    "--dropout": "0.15",
+    "--keep-interval-updates": "2",
+    "--dropout": "0.1",
     "--max-epoch": "150",
     "--max-tokens": "4096",
     "--no-epoch-checkpoints": "",

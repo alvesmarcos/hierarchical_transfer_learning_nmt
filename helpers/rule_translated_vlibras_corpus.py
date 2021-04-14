@@ -17,7 +17,7 @@ def run(path, output):
         gi.append(row['GI'])
     assert len(gr) == len(gi)
 
-    with open(os.path.join(output, 'corpus_teste_rule_vlibras.csv'), 'w') as fd:
+    with open(output, 'w') as fd:
         for sentence_gr, sentence_gi in zip(gr, gi):
             fd.write(f"{sentence_gr},{sentence_gi}\n")
 
@@ -26,4 +26,4 @@ if __name__ == "__main__":
     fire.Fire(run)
 
 # to run: [MA]
-# python helpers/rule_translated_vlibras_corpus.py --path=data/corpus_teste.csv --output=data/
+# python helpers/rule_translated_vlibras_corpus.py --path=data/corpus_teste.csv --output=data/name.csv
