@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+from tqdm import tqdm
 
 from text_similarity import TextSimilarity
 
@@ -58,7 +59,7 @@ class WordEmbedding:
     def __similarity(self, words, embeds, vocabulary, algorithm="levenshtein"):
         words_out = list()
         embeds_out = list()
-        for token in vocabulary:
+        for token in tqdm(vocabulary):
             words_out.append(token)
             if token in words:
                 embeds_out.append(embeds[words.index(token)])
