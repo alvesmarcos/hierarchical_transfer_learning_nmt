@@ -18,7 +18,7 @@ def create_dirs(arch, sample, json_path, strategy, experiment):
     folders = ['checkpoints', 'tmp', 'log', 'embeds']
     strategy = 'fairseq' if strategy is None else strategy
     path = os.path.abspath(
-        f"dump/expt{experiment}__train__{arch}__{strategy}__{int(sample*100)}@{timestamp}")
+        f"dump/expt__{experiment}__train__{arch}__{strategy}__{int(sample*100)}@{timestamp}")
     os.makedirs(path, exist_ok=True)
     copyfile(json_path, os.path.join(path, 'params.json'))
     write_commit_hash(os.path.join(path, 'commit.txt'))
@@ -66,7 +66,7 @@ def write_embeds(path, name, embeds, indices, symbols):
 
 def train(experiment, bin_path, fairseq_params, source_lang, target_lang, sample=1, save_embeds=True, pre_trained=False, embed_path='', strategy=None):
     params, params_dict = extract_params_from_json(fairseq_params)
-    path = create_dirs(params_dict['--arch'], sample, fairseq_params, strategy, experiment)
+    path = create_dirs(params_dict['--arch'], sample, fairseq_params, strategy, str(experiment))
     embed_params = ''
 
     if pre_trained:
